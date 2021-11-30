@@ -1,0 +1,36 @@
+Check if a tree is a BST or BT
+
+/*
+recursion
+
+root must lies min of left min and right max
+both right & left subtree should be return true
+
+             13    
+           /    \
+          10     15  
+         /  \   /  \
+        7   12 14   17
+         \         /
+          9      10
+         /
+        8
+        
+*/
+
+class Solution {
+
+public:
+    bool isvalid(TreeNode* root, long long minval, long long maxval){
+        if(root == NULL){
+            return true;
+        }
+        if(root -> val >= maxval || root -> val <= minval){
+            return false;
+        }
+        return isvalid(root -> left, minval, root -> val) && isvalid(root -> right, root -> val, maxval);
+    }
+    bool isValidBST(TreeNode* root) {
+         return isvalid(root, LONG_MIN, LONG_MAX);
+    }
+};
