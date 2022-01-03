@@ -1,0 +1,46 @@
+Group_Anagrams_together
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, 
+typically using all the original letters exactly once.
+
+* Two strings are anagrams if and only if their sorted strings are equal.
+* So we just use a Hash Table data structure to group strings, 
+  where the key is the sorted string of its string.
+
+For example: 
+strs = ["eat","tea","tan","ate","nat","bat"]
+
+["ate","eat","tea"] forms a group, because they have the same key "aet"
+["nat", "tan"] forms a group, because they have the same key "ant"
+["bat"] forms a group, because they have the same key "abt"
+
+Examples:
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+Input: strs = [""]
+Output: [[""]]
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        
+        vector <vector<string>> ans;
+        unordered_map <string,vector<string>> mpp;
+        // Iterating over vector of strings
+        for(int i = 0; i < strs.size(); i++){
+
+            string str = strs[i];  // getting string
+            sort(str.begin(), str.end()); // sorting string
+            
+            mpp[str].push_back(strs[i]); // mapping string according to sorted string
+        }
+        
+        for(auto i:mpp){
+            // grouping all anagrams
+            ans.push_back(i.second);
+        }
+      
+        return ans;
+    }
+};
