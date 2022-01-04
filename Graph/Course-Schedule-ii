@@ -1,0 +1,103 @@
+Course Schedule II
+
+* Graph must be DAG(Directed Acyclic Graph) for topological sort.
+* A DAG always have a node with INDEGREE 0 & another node with OUTDEGREE 0.
+* Longest Path between 2 nodes in DAG is always finite.
+
+* In topo sort,
+  linear ordering of vertices such that for every directed edge
+  U -> V 
+  vertex U will come before V in linear ordering.
+  
+By BFS 
+
+Adj List[]
+ U  -> V
+ 0  -> 
+ 1  ->
+ 2  -> 0
+ 3  -> 0, 2
+ 4  -> 0, 1
+ 5  -> 0, 3
+ 
+ Indegree array
+ 
+ Indexes:   0 | 1 | 2 | 3 | 4 | 5
+ Indegrees: 3   2   1   1   0   0
+ 
+ count = 0 (No. of nodes processed)
+ store pop out nodes from queue in DS
+ 
+ Taking Queue 
+ Push all nodes with indegrees 0 into queue
+ 
+ push nodes at index 4 & 5 into queue
+ 
+ Queue  4 | 5 | 3
+ decrease indegrees of adj list nodes of 4 by 1
+ pop out 4
+ 
+ decrease indegrees of adj list nodes of 5 by 1
+ pop out 5
+ indegree of 3 become 0, so push it in queue
+ 
+ If new indegree of any node become 0, put in queue
+ ...
+ 
+ if count != No. Nodes in graph
+ it's not DAG
+ 
+ T.C. = O(V + E)
+ 
+class Solution {
+public:
+    bool kahnsAlgo(vector <vector<int>> &adj, int n, vector <int> &indegrees, vector <int> &ans){
+        queue<int>q;
+        for(int i = 0; i < n; i++){
+            if(indegrees[i] == 0){
+                q.push(i);
+            }
+        }
+        
+        int count = 0;
+        while(!q.empty()){
+            int curr = q.front();
+            q.pop();
+            
+            for(auto a: adj[curr]){
+                indegrees[a] -=1;
+                if(indegrees[a] == 0){
+                    q.push(a);
+                }
+            }
+            
+            ans.push_back(curr);
+            count++;
+        }
+        
+        if(count != n){
+            return false;
+        }
+        return true;
+    }
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        
+        int n = prerequisites.size();
+        vector < vector<int> > adj(numCourses);
+        vector <int> indegrees(numCourses, 0);
+        
+        for(int i = 0; i < n; i++){
+            adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+            indegrees[prerequisites[i][0]]++;
+        }
+        
+        vector <int> ans;
+        
+        if(kahnsAlgo(adj, numCourses, indegrees, ans)){
+            return ans;
+        }
+        vector <int> empty;
+        
+        return empty;
+    }
+};
