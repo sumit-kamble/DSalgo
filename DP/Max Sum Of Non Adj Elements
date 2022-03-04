@@ -1,0 +1,104 @@
+Given Array, find max sum of non adj elements
+
+e.g. [2, 1, 4, 9]
+output = 11
+
+Recursion:
+
+int MaxSum(int ind, vector <int> &nums){
+    
+    if(ind == 0) return nums[ind];  
+    if(ind < 0) return 0;  // negative index
+    
+    int pick = nums[ind] + MaxSum(ind - 2, nums);
+    int nonpick = 0 + MaxSum(ind - 1, nums);
+    
+    return max(pick, nonpick);
+}
+
+TC = O(N)
+SC = O(N) + O(N)
+
+==========================================================================
+
+Memorize:
+
+int f(int ind, vector <int> &nums, vector <int> &dp){
+   
+   if(ind == 0) return nums[ind];
+   if(ind < 0) return 0;
+   
+   if(dp[ind] != -1) return dp[ind];
+   
+   int pick = nums[ind] + f(ind - 2, nums, dp);
+   int nonpick = 0 + f(ind - 1, nums, dp);
+   
+   return dp[ind] = max(pick, noonpick);
+}
+
+int maxsum(vector <int> &nums){
+   
+   int n = nums.size();
+   vector <int> dp(n, -1);
+   
+   return f(n - 1, nums, dp);
+}
+
+================================================================================
+
+Tabulation:
+
+int maxSum(vector <int> &nums, vector <int> &dp){
+
+    dp[0] = nums[0];
+    int n = nums.size();
+    int neg = 0;
+    
+    for(int i = 1; i < n; i++){
+        
+        int take = nums[i];
+        if(i > 1){
+             take += dp[i - 2];
+         }
+         
+         int nontake = 0 + dp[i - 1];
+         
+        dp[i] = max(take, nontake);
+        
+    }
+    
+    return dp[n - 1];
+    
+}
+
+TC : O(N)
+SC : O(N)
+
+====================================================================================
+
+Space Optimization:
+
+int maxSum(vector <int> &nums){
+   
+   int prev1 = nums[0];
+   int prev2 = 0;
+   
+   for(int i = 1; i < n; i++){
+      int take = nums[i];
+      if(i > 1){
+         take += prev2;
+      }
+      
+      int nontake = 0 + prev1;
+      
+      int curri = max(take, nontake);
+      prev2 = prev1;
+      prev1 = curri;
+      
+   }
+   
+   return prev1;
+}
+
+TC : O(N)
+SC : O(1)
