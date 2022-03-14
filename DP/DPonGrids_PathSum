@@ -1,0 +1,80 @@
+DP on Grid
+1) (0, 0) to (n - 1, m - 1) -> fixed point to fixed point
+2) fixed point to variable point
+3) variable point to variable point
+
+Min ? Max Path Sum (variable point to variable point)ddd:
+Return max/min path sum from any cell from first row to any cell to the last row
+
+steps :
+  1) express index in (i, j), base case
+  2) explore all paths
+  3) return max/ min sun
+
+f(i, j){
+
+ if(j < 0 || j >= m) return -1e9;
+ 
+ if(i == 0) return a[0][j];
+ 
+ if(dp[i][j] != -1) return dp[i][j];
+ 
+ int s = a[i][j] + f(i - 1, j);
+ int ld = a[i][j] + f(i - 1, j - 1);
+ int nd = a[i][j] + f(i - 1, j + 1);
+ 
+ return dp[i][j] = max(s, max(ld, nd));
+ 
+}
+
+TC = O(n * m)
+sc = O(n * m) + O(n)
+
+
+Tabulation :
+
+int dp[n][m];
+for(j = 0 -> m - 1) dp[0][j] = a[0][j];
+for(i = 1 -> m - 1){
+    for(j = 0 -> m - 1){
+       s = a[i][j] + dp[i - 1][j];
+       if(j - 1 >= 0) ld = a[i][j] + dp[i - 1][j - 1];
+       if(j + 1 < m)  nd = a[i][j] + dp[i - 1][j + 1];
+       
+       dp[i][j] = max(s, ld, nd);
+    }
+}
+
+maxi = dp[n - 1][0];
+for(j = 1 -> m - 1){
+     maxi = max(maxi, dp[n - 1][j]);
+}
+
+TC = O(n * m) + O(n)
+SC = O(n * m)
+
+Space Optimization :
+
+prev[n], curr[n]
+for(j = 0 -> m - 1) prev[j] = a[0][j];
+for(i = 1 -> m - 1){
+    for(j = 0 -> m - 1){
+       s = a[i][j] + prev[j];
+       if(j - 1 >= 0) ld = a[i][j] +  prev[j - 1];
+       if(j + 1 < m)  nd = a[i][j] +  prev[j + 1];
+       
+        curr[j] = max(s, ld, nd);
+    }
+    
+    prev = curr;
+}
+
+maxi = dp[n - 1][0];
+for(j = 1 -> m - 1){
+     maxi = max(maxi, dp[n - 1][j]);
+}
+
+TC = O(n * m) + O(n)
+SC = O(n)
+
+
