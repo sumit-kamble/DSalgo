@@ -1,1 +1,17 @@
+Input: s = "RLLLLRRRLR"
+Output: 3
+Explanation: s can be split into "RL", "LLLRRR", "LR", each substring contains same number of 'L' and 'R'.
 
+We can split as soon as we have the same amount of 'L' and 'R'.
+
+We can increment bal when we see 'L', and decrement for 'R'.
+We can do the split when the bal == 0.
+
+int balancedStringSplit(string s) {
+    int bal = 0, res = 0;
+    for (auto ch : s) {
+        bal += ch == 'L' ? 1 : -1;
+        if (bal == 0) ++res;
+    }
+    return res;
+}
