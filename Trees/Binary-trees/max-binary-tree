@@ -1,0 +1,23 @@
+   Input: nums = [3,2,1,6,0,5]
+   Output: [6,3,5,null,2,0,null,null,1]
+   
+   
+   TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        return helper(nums, 0, nums.size() - 1);
+    }
+    
+    TreeNode * helper(vector <int> &nums, int left, int right){
+        if(left > right) return NULL;
+        
+        int max_ind = left;
+        
+        for(int i = left; i <= right; i++){
+            if(nums[i] > nums[max_ind]) max_ind = i;
+        }
+        
+        TreeNode* root = new TreeNode(nums[max_ind]);
+        root -> left = helper(nums, left, max_ind - 1);
+        root -> right = helper(nums, max_ind + 1, right);
+        
+        return root;
+    }
